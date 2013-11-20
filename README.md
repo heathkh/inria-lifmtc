@@ -6,19 +6,22 @@ local image feature matching w/ geometric verification by transform clustering
 Requirements
 ============
 
-CMake 2.8 or better
-install CMake SNAP
+* CMake 2.8 or better
+* CMake SNAP
 
 
 Compiling
 =========
-
-cd <source dir>
+```
+cd <source dir> 
 mkdir build
 cd build
 cmake ..
+ ```
 
 Running
 =========
+ ```
 cd <source dir>/build
 ./run_experiment.py
+ ```
