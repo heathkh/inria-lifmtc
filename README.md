@@ -6,6 +6,7 @@ local image feature matching w/ geometric verification by transform clustering
 Requirements
 ============
 
+* Linux (probably best with deb based system like ubuntu)
 * CMake 2.8 or better
 * CMake SNAP
 
