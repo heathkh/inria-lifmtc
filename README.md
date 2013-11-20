@@ -17,6 +17,8 @@ cd <source dir>
 mkdir build
 cd build
 cmake ..
+cmake ..   # yep... need to do it twice
+make -j10  # build... parallel
  ```
 
 Running
