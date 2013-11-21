@@ -1,0 +1,7 @@
+/build
+/.cproject
+/.project
+/.pydevproject
+snap/boost/*.html
+snap/boost/*.png
+*.pyc
