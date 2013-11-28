@@ -30,10 +30,11 @@ bool ACRansacImageMatcher::Run(const ImageFeatures& features_a,
   *time = 0;
   boost::timer timer;
 
-  FeatureCorrespondences initial_correspondences;
+  FeatureCorrespondences a_or_b, a_and_b;
 #if 1
   BidirectionalFeatureMatcher feature_matcher;
-  feature_matcher.Run(features_a, features_b, &initial_correspondences);
+  feature_matcher.Run(features_a, features_b, &a_or_b, &a_and_b);
+  FeatureCorrespondences& initial_correspondences = a_and_b;
 #else
   CHECK(MatchFeaturesMutualBestMatchCemd(features_a, features_b, &initial_correspondences));
 #endif
@@ -41,7 +42,7 @@ bool ACRansacImageMatcher::Run(const ImageFeatures& features_a,
   Correspondences correspondences;
   Correspondences discarded_correspondences;
   ACRansacIndependenceFilter(features_a, features_b, initial_correspondences).Run(&correspondences, &discarded_correspondences);
-  LOG(INFO) << "correspondences used: " << correspondences.size() << " discarded: " << discarded_correspondences.size();
+  //LOG(INFO) << "correspondences used: " << correspondences.size() << " discarded: " << discarded_correspondences.size();
 
   int num_correspondences = correspondences.size();
   bool found_model = false;

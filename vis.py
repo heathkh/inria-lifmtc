@@ -19,7 +19,7 @@ def UnityRgbToCssString(rgb):
 
 def RenderMatchSVG(image_a_filename,
                    image_b_filename,
-                   clusters_to_matches, # list of nx4 matrices where rows are matching point coords [ax ay ar bx by br]
+                   clusters_to_matches, # list of nx6 matrices where rows are matching point coords [ax ay ar bx by br]
                    colors):
     svg = None
     image_a_data = open(image_a_filename,'rb').read()

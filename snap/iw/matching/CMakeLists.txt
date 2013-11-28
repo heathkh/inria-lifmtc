@@ -18,8 +18,9 @@ CPP_LIBRARY(
             //snap/orsa:orsa
             //snap/opencv2/core:core
             //snap/iw:proto
-            //snap/iw/matching:featurematcher            
-  LIB_TYPE  STATIC
+            //snap/iw/matching:featurematcher              
+  LIB_TYPE  STATIC_AND_SHARED  
+  SWIG_PY   py_imagematcher.i
 )
 
 

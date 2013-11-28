@@ -35,15 +35,35 @@ def main():
   #plt.show()    
   
   num_neighbors=200
-  rips_radius=0.5
+  rips_radius=0.25
   persistence_threshold=1.5
   clusters = py_tomato.cluster(data, num_neighbors, rips_radius, persistence_threshold)
   
+  
+  plt.figure()
   for cluster in clusters:
     indices = [v for v in cluster.member_indices]
     print cluster
     plt.plot(data[indices,0], data[indices,1], 'o')
     
+  
+  tomato_diagram = py_tomato.diagram(data, num_neighbors, rips_radius)
+  
+  plt.figure()
+  x = []
+  y = []
+  for p in tomato_diagram:
+    x.append(p.birth)
+    y.append(p.death)
+    
+  print y  
+  plt.plot(x,y,'ko')
+  plt.xlabel('Birth')
+  plt.ylabel('Death')
+  plt.title('Persistence Diagram')
+  
+  
+  
   plt.show()    
   
   return

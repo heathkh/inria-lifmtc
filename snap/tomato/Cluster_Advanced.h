@@ -42,6 +42,17 @@
 
 #include "Cluster.h"
 
+class PersistanceDiagramPoint {
+public:
+  PersistanceDiagramPoint(){}
+  PersistanceDiagramPoint(double birth, double death) :
+    birth(birth),
+    death(death) {
+  }
+  double birth;
+  double death;
+};
+
 class Cluster {
 public:
   Cluster(){}
@@ -187,17 +198,32 @@ public:
 		return false;
 	}
 
+
+  //------------------------------
+  // Output intervals
+  //------------------------------
+  void get_diagram(std::vector<PersistanceDiagramPoint>* diagram){
+    std::vector<Interval>::iterator it;
+    assert(diagram);
+    diagram->clear();
+    for(it = Int_Data.begin();it != Int_Data.end(); ++it){
+      diagram->push_back(PersistanceDiagramPoint(it->birth(), it->inf() ? 0 : it->death()) );
+    }
+  }
+
 	//------------------------------
 	//
 	//------------------------------
 	template<class IIterator>
-	std::vector<Cluster> get_clusters(IIterator start, IIterator finish) {
+	void get_clusters(IIterator start, IIterator finish, std::vector<Cluster>* clusters) {
 		//------------------------------
 		// run through and
 		// create map of prominent clusters
 		//------------------------------
 		std::map<Iterator, int> cluster_ids;
-		std::vector<Cluster> clusters;
+		assert(clusters);
+
+		clusters->clear();
 
 		int member_index = 0;
 		for (IIterator it = start; it != finish; it++, member_index++) {
@@ -209,7 +235,7 @@ public:
 		    // create cluster if needed
 		    int cluster_index = -1;
 		    if (iter == cluster_ids.end()){
-		      cluster_index = clusters.size();
+		      cluster_index = clusters->size();
 		      cluster_ids[sink] = cluster_index;
 		      const Interval& interval = Int_Data[Generator[sink]];
 
@@ -217,20 +243,18 @@ public:
           double death = interval.inf() ? 0 : interval.death();
           double persistence =  birth - death;
           //std::cout << "persistence: " << persistence << std::endl;
-          clusters.push_back(Cluster(birth, death, persistence));
+          clusters->push_back(Cluster(birth, death, persistence));
 
 		    }
 		    else{
 		      cluster_index = iter->second;
 		    }
 		    assert(cluster_index != -1);
-		    clusters.at(cluster_index).member_indices.push_back(member_index);
+		    clusters->at(cluster_index).member_indices.push_back(member_index);
 		  }
 		}
 
-		std::sort(clusters.begin(), clusters.end(), OrderDecreasing);
-
-    return clusters;
+		std::sort(clusters->begin(), clusters->end(), OrderDecreasing);
 	}
 
 

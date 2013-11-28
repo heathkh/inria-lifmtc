@@ -129,8 +129,10 @@ BidirectionalFeatureMatcher::~BidirectionalFeatureMatcher() {
 
 bool BidirectionalFeatureMatcher::Run(const iw::ImageFeatures& features_a,
            const iw::ImageFeatures& features_b,
-           FeatureCorrespondences* matches){
-  CHECK(matches);
+           FeatureCorrespondences* a_or_b,
+           FeatureCorrespondences* a_and_b){
+  CHECK_NOTNULL(a_and_b);
+  CHECK_NOTNULL(a_or_b);
   FeatureCorrespondences matches_a_to_b;
   FeatureCorrespondences matches_b_to_a;
   MatchDescriptors(features_a.descriptors(), features_b.descriptors(), A_TO_B, &matches_a_to_b, 1);
@@ -138,16 +140,12 @@ bool BidirectionalFeatureMatcher::Run(const iw::ImageFeatures& features_a,
   sort(matches_a_to_b.begin(), matches_a_to_b.end(), set_sort_comparator);
   sort(matches_b_to_a.begin(), matches_b_to_a.end(), set_sort_comparator);
 
-  /*
+  std::copy (matches_a_to_b.begin(), matches_a_to_b.end(), back_inserter(*a_or_b));
+  std::copy (matches_b_to_a.begin(), matches_b_to_a.end(), back_inserter(*a_or_b));
+
   set_intersection(matches_a_to_b.begin(), matches_a_to_b.end(),
                    matches_b_to_a.begin(), matches_b_to_a.end(),
-                   back_inserter(*matches), set_sort_comparator);
-  */
-
-
-  std::copy (matches_a_to_b.begin(), matches_a_to_b.end(), back_inserter(*matches));
-  std::copy (matches_b_to_a.begin(), matches_b_to_a.end(), back_inserter(*matches));
-
+                   back_inserter(*a_and_b), set_sort_comparator);
 
   return true;
 }

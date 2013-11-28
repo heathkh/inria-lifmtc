@@ -248,6 +248,7 @@ double OrsaModel::orsa(std::vector<size_t> & vec_inliers,
         errorMax = vec_residuals[best.index-1].error; // Error threshold
         if(model) *model = vec_models[k];
 
+        /*
 		    if(bVerbose){
           std::cout << "  nfa=" << minNFA
                     << " inliers=" << best.index
@@ -260,6 +261,7 @@ double OrsaModel::orsa(std::vector<size_t> & vec_inliers,
             std::cout << ',' << *it;
           std::cout << ")" <<std::endl;
         }
+        */
       }
     }
 

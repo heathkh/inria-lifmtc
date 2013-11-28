@@ -12,7 +12,7 @@ public:
 
   virtual bool Run(const iw::ImageFeatures& features_a,
                    const iw::ImageFeatures& features_b,
-                   GeometricMatches* matches, double* time) = 0;
+                   iw::GeometricMatches* matches, double* time) = 0;
 
 };
 

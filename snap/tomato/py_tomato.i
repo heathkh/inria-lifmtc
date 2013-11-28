@@ -3,8 +3,6 @@
 %include "exception.i"
 %include "std_vector.i"
 
-
-
 %{
 #define SWIG_FILE_WITH_INIT
 %}
@@ -19,8 +17,16 @@ import_array();
 
 %apply (double* IN_ARRAY2, int DIM1, int DIM2) {(double* data, int nb_points, int point_dim)};
 
-
-%include "snap/tomato/tomato.h"
+class PersistanceDiagramPoint {
+public:
+  PersistanceDiagramPoint(){}
+  PersistanceDiagramPoint(double birth, double death) :
+    birth(birth),
+    death(death) {
+  }
+  double birth;
+  double death;
+};
 
 class Cluster {
 public:
@@ -46,9 +52,13 @@ public:
 } 
 
 namespace std {
-   %template(vectord) vector<double>;
    %template(vectori) vector<int>;
+   %template(vectorpersistencepoints) vector<PersistanceDiagramPoint>;   
    %template(vectorcluster) vector<Cluster>;
 };
 
+%apply std::vector<PersistanceDiagramPoint>* OUTPUT {std::vector<PersistanceDiagramPoint>*};
+%apply std::vector<Cluster>* OUTPUT {std::vector<Cluster>*};
+
+%include "snap/tomato/tomato.h"
 

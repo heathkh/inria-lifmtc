@@ -49,7 +49,8 @@ public:
 
 	bool Run(const iw::ImageFeatures& features_a,
            const iw::ImageFeatures& features_b,
-           FeatureCorrespondences* correspondences);
+           FeatureCorrespondences* a_or_b,
+           FeatureCorrespondences* a_and_b);
 
 protected:
 	enum MatchDirection {A_TO_B, B_TO_A};

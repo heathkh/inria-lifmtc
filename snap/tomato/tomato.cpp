@@ -2,7 +2,7 @@
 #include <sstream>
 #include <cassert>
 #include <algorithm>
-
+#include <limits>
 
 #include "Vertex.h"
 #include "Distance_ANN.h"
@@ -27,7 +27,7 @@ template<class V> class Less_Than {
 };
 
 
-std::vector<Cluster> cluster(double* data, int nb_points, int point_dim, int num_neighb, double r, double persistence_threshold){
+void cluster_base(double* data, int nb_points, int point_dim, int num_neighb, double r, double persistence_threshold, std::vector<Cluster>* clusters, std::vector<PersistanceDiagramPoint>* diagram){
   vector< Point > point_cloud(nb_points);
 
   //read in data points
@@ -88,22 +88,34 @@ std::vector<Cluster> cluster(double* data, int nb_points, int point_dim, int num
   //set rips parameter
   metric_information.mu = r*r;
 
-
   //create cluster data structure
-  Clustering< vector<Point>::iterator > output_clusters;
+  Clustering< vector<Point>::iterator > clustering;
   //set threshold
-  output_clusters.tau = persistence_threshold;
+  clustering.tau = persistence_threshold;
   
   // perform clustering
-  compute_persistence(point_cloud.begin(),point_cloud.end(),
-		      metric_information,output_clusters);
+  compute_persistence(point_cloud.begin(),point_cloud.end(), metric_information, clustering);
 
-  // compress data structure:
-  // attach each data point to its cluster's root directly
-  // to speed up output processing
-  attach_to_clusterheads(point_cloud.begin(),point_cloud.end());
+  if (clusters){
+    // compress data structure:
+    // attach each data point to its cluster's root directly
+    // to speed up output processing
+    attach_to_clusterheads(point_cloud.begin(),point_cloud.end());
 
-  // output clusters (use permutation to preserve original point order)
-  std::vector<Cluster> clusters = output_clusters.get_clusters(pperm.begin(), pperm.end());
-  return clusters;
+    // output clusters (use permutation to preserve original point order)
+    clustering.get_clusters(pperm.begin(), pperm.end(), clusters);
+  }
+
+  if (diagram){
+    clustering.get_diagram(diagram);
+  }
+}
+
+void diagram(double* data, int nb_points, int point_dim, int num_neighb, double r, std::vector<PersistanceDiagramPoint>* diagram){
+  double persistence_threshold = std::numeric_limits<double>::infinity();
+  cluster_base(data, nb_points, point_dim, num_neighb, r, persistence_threshold, NULL, diagram);
+}
+
+void cluster(double* data, int nb_points, int point_dim, int num_neighb, double r, double persistence_threshold, std::vector<Cluster>* clusters){
+  cluster_base(data, nb_points, point_dim, num_neighb, r, persistence_threshold, clusters, NULL);
 }

@@ -108,7 +108,7 @@ bool FitModelType(const iw::Correspondences& correspondences,
   double image2_size = sqrt(double(w2*h2));
   ModelType orsa_model(correspondences, points_a, w1, h1, points_b, h2, h2, params);
   double required_precision = image2_size*params.precision_ratio();
-  LOG(INFO) << "required_precision: " << required_precision;
+  //LOG(INFO) << "required_precision: " << required_precision;
   orsa::OrsaModel::Mat model_mat = orsa::OrsaModel::Mat::zeros(3);
   *nfa = orsa_model.orsa(*inliers, params.max_iterations(), required_precision, precision, &model_mat, true);
 
